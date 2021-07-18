@@ -30,21 +30,29 @@ struct Opts {
     silent: bool,
 }
 
+fn get_opts() -> Opts {
+    let mut opts: Opts = argh::from_env();
+    if opts.token.is_none() {
+        opts.token = Some(env::var(ENV_TOKEN).expect("token not found"));
+        env::remove_var(ENV_TOKEN);
+    }
+    opts
+}
+
 #[tokio::main]
 async fn main() -> Result<()> {
-    let opts: Opts = argh::from_env();
-    let token = match opts.token {
-        Some(s) => s,
-        None => {
-            let s = env::var(ENV_TOKEN).expect("token not found");
-            env::remove_var(ENV_TOKEN);
-            s
-        }
-    };
+    let opts = get_opts();
     if opts.chat_id == 0 {
-        find_chat_id(&token).await?;
+        find_chat_id(&opts.token.unwrap()).await?;
+        return Ok(());
     }
-    let answer = get_prompt(&token, opts.chat_id, &opts.message, &opts.keyboard).await?;
+    let answer = get_prompt(
+        &opts.token.unwrap(),
+        opts.chat_id,
+        &opts.message,
+        &opts.keyboard,
+    )
+    .await?;
     if opts.silent {
         if answer
             != opts
