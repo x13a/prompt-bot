@@ -2,7 +2,7 @@ use std::env;
 
 use argh::FromArgs;
 
-use tg_prompt::{discord, share, telegram};
+use bot_prompt::{discord, share, telegram};
 
 const ENV_TOKEN: &'static str = "BOT_PROMPT_TOKEN";
 

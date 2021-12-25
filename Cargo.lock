@@ -104,6 +104,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "bot-prompt"
+version = "0.2.0"
+dependencies = [
+ "argh",
+ "serenity",
+ "teloxide",
+ "tokio",
+]
+
+[[package]]
 name = "bumpalo"
 version = "3.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1461,16 +1471,6 @@ dependencies = [
  "redox_syscall 0.2.10",
  "remove_dir_all",
  "winapi",
-]
-
-[[package]]
-name = "tg-prompt"
-version = "0.2.0"
-dependencies = [
- "argh",
- "serenity",
- "teloxide",
- "tokio",
 ]
 
 [[package]]
