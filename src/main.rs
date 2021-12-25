@@ -2,20 +2,44 @@ use std::env;
 
 use argh::FromArgs;
 
-use tg_prompt::{find_chat_id, get_prompt, Result, BUTTON_SEP, ROW_SEP};
+use tg_prompt::{discord, share, telegram};
 
-const ENV_TOKEN: &'static str = "TG_PROMPT_TOKEN";
+const ENV_TOKEN: &'static str = "BOT_PROMPT_TOKEN";
 
-#[derive(FromArgs)]
-/// Telegram prompt.
+#[derive(FromArgs, PartialEq, Debug)]
+#[argh(subcommand)]
+enum Network {
+    Telegram(TelegramNetwork),
+    Discord(DiscordNetwork),
+}
+
+#[derive(FromArgs, PartialEq, Debug)]
+/// use telegram
+#[argh(subcommand, name = "tg")]
+struct TelegramNetwork {}
+
+#[derive(FromArgs, PartialEq, Debug)]
+/// use discord
+#[argh(subcommand, name = "discord")]
+struct DiscordNetwork {
+    #[argh(option, short = 'a')]
+    /// application id
+    application_id: u64,
+}
+
+#[derive(FromArgs, PartialEq, Debug)]
+/// Bot prompt.
 struct Opts {
     #[argh(option, short = 't')]
-    /// telegram bot token (env: TG_PROMPT_TOKEN)
+    /// bot token (env: BOT_PROMPT_TOKEN)
     token: Option<String>,
 
     #[argh(option, short = 'c')]
     /// chat id
-    chat_id: i64,
+    chat_id: i128,
+
+    #[argh(subcommand)]
+    network: Network,
 
     #[argh(option, short = 'm')]
     /// message
@@ -40,25 +64,18 @@ fn get_opts() -> Opts {
 }
 
 #[tokio::main]
-async fn main() -> Result<()> {
-    let opts = get_opts();
-    if opts.chat_id == 0 {
-        find_chat_id(&opts.token.unwrap()).await?;
-        return Ok(());
-    }
-    let answer = get_prompt(
-        &opts.token.unwrap(),
-        opts.chat_id,
-        &opts.message,
-        &opts.keyboard,
-    )
-    .await?;
+async fn main() -> share::Result<()> {
+    let opts = &get_opts();
+    let answer = match opts.network {
+        Network::Telegram(_) => main_telegram(opts).await?,
+        Network::Discord(ref v) => main_discord(opts, v).await?,
+    };
     if opts.silent {
         if answer
             != opts
                 .keyboard
-                .split(ROW_SEP)
-                .map(|s| s.split(BUTTON_SEP))
+                .split(share::ROW_SEP)
+                .map(|s| s.split(share::BUTTON_SEP))
                 .flatten()
                 .next()
                 .unwrap_or_default()
@@ -69,4 +86,29 @@ async fn main() -> Result<()> {
         println!("{}", answer);
     }
     Ok(())
+}
+
+async fn main_telegram(opts: &Opts) -> share::Result<String> {
+    if opts.chat_id == 0 {
+        telegram::find_chat_id(opts.token.as_ref().unwrap()).await?;
+        return Ok("".into());
+    }
+    Ok(telegram::get_prompt(
+        opts.token.as_ref().unwrap(),
+        opts.chat_id as i64,
+        &opts.message,
+        &opts.keyboard,
+    )
+    .await?)
+}
+
+async fn main_discord(opts: &Opts, network: &DiscordNetwork) -> share::Result<String> {
+    Ok(discord::get_prompt(
+        opts.token.as_ref().unwrap(),
+        network.application_id,
+        opts.chat_id as u64,
+        &opts.message,
+        &opts.keyboard,
+    )
+    .await?)
 }

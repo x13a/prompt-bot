@@ -1,4 +1,4 @@
-NAME        := tg-prompt
+NAME        := bot-prompt
 
 prefix      ?= /usr/local
 exec_prefix ?= $(prefix)

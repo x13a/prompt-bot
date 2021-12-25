@@ -1,10 +1,11 @@
 [package]
-name = "tg-prompt"
-version = "0.1.1"
+name = "bot-prompt"
+version = "0.2.0"
 authors = ["lucky"]
 edition = "2018"
 
 [dependencies]
 argh = "0.1"
-teloxide = "0.4"
-tokio = { version =  "1.3", features = ["rt-multi-thread", "macros"] }
+teloxide = "0.5"
+serenity = { version = "0.10", default_features = false, features = [ "client", "collector", "unstable_discord_api", "rustls_backend"] }
+tokio = { version =  "1", features = ["rt-multi-thread", "macros"] }
