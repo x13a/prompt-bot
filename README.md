@@ -5,8 +5,8 @@ Bot prompt.
 This is a cli utility that can be used to process events that requires user interaction.
 For example, it can be used like google prompt login.
 
-It sends message via telegram / discord to your chat with inline keyboard. When you push button, it gets that text, 
-print it to stdout and exit. Or you can use `-s` switch to exit success only if first button text is pushed else it 
+It sends message via `telegram | discord` to your chat with inline keyboard. When you push button, it gets that text, 
+print it to stdout and exit. Or you can use `-s` option to exit success only if first button text is pushed else it 
 will exit failure.
 
 ## Installation
