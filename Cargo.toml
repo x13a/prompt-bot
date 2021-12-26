@@ -1,6 +1,6 @@
 [package]
-name = "bot-prompt"
-version = "0.2.1"
+name = "prompt-bot"
+version = "0.2.2"
 authors = ["lucky"]
 edition = "2018"
 

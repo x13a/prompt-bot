@@ -2,9 +2,9 @@ use std::env;
 
 use argh::FromArgs;
 
-use bot_prompt::{discord, share, telegram};
+use prompt_bot::{discord, share, telegram};
 
-const ENV_TOKEN: &'static str = "BOT_PROMPT_TOKEN";
+const ENV_TOKEN: &'static str = "PROMPT_BOT_TOKEN";
 
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand)]
@@ -28,10 +28,10 @@ struct DiscordNetwork {
 }
 
 #[derive(FromArgs, PartialEq, Debug)]
-/// Bot prompt.
+/// Prompt bot.
 struct Opts {
     #[argh(option, short = 't')]
-    /// bot token (env: BOT_PROMPT_TOKEN)
+    /// bot token (env: PROMPT_BOT_TOKEN)
     token: Option<String>,
 
     #[argh(option, short = 'c')]

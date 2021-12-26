@@ -1,4 +1,4 @@
-NAME        := bot-prompt
+NAME        := prompt-bot
 
 prefix      ?= /usr/local
 exec_prefix ?= $(prefix)

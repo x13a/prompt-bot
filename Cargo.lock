@@ -104,16 +104,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bot-prompt"
-version = "0.2.1"
-dependencies = [
- "argh",
- "serenity",
- "teloxide",
- "tokio",
-]
-
-[[package]]
 name = "bumpalo"
 version = "3.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -975,6 +965,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2f84e92c0f7c9d58328b85a78557813e4bd845130db68d7184635344399423b1"
 dependencies = [
  "unicode-xid",
+]
+
+[[package]]
+name = "prompt-bot"
+version = "0.2.2"
+dependencies = [
+ "argh",
+ "serenity",
+ "teloxide",
+ "tokio",
 ]
 
 [[package]]
